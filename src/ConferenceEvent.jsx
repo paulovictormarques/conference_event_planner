@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./ConferenceEvent.css";
 import TotalCost from "./TotalCost";
+import { toggleMealSelection } from "./mealsSlice";
+import { incrementAvQuantity, decrementAvQuantity } from "./avSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { incrementQuantity, decrementQuantity } from "./venueSlice";
-import { incrementAvQuantity, decrementAvQuantity } from "./avSlice";
-import { toggleMealSelection } from "./mealsSlice";
 
 const ConferenceEvent = () => {
     const [showItems, setShowItems] = useState(false);
@@ -13,6 +13,7 @@ const ConferenceEvent = () => {
     const avItems = useSelector((state) => state.av);
     const dispatch = useDispatch();
     const remainingAuditoriumQuantity = 3 - venueItems.find(item => item.name === "Auditorium Hall (Capacity:200)").quantity;
+    const mealsItems = useSelector((state) => state.meals);
 
     
     const handleToggleItems = () => {
@@ -51,7 +52,7 @@ const ConferenceEvent = () => {
 		dispatch(toggleMealSelection(index));
 	}
     };
-    const mealsItems = useSelector((state) => state.meals);
+
     const getItemsFromTotalCost = () => {
         const items = [];
         venueItems.forEach((item) => {
@@ -80,7 +81,6 @@ const ConferenceEvent = () => {
     };
 
     const items = getItemsFromTotalCost();
-    const mealsTotalCost = calculateTotalCost("meals");
     const ItemsDisplay = ({ items }) => {
         console.log(items);
         return <>
@@ -138,6 +138,9 @@ const ConferenceEvent = () => {
 };
     const venueTotalCost = calculateTotalCost("venue");
     const avTotalCost = calculateTotalCost("av");
+    const mealsTotalCost = calculateTotalCost("meals");
+    
+
     const navigateToProducts = (idType) => {
         if (idType == '#venue' || idType == '#addons' || idType == '#meals') {
           if (showItems) { // Check if showItems is false
